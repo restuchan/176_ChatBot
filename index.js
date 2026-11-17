@@ -34,7 +34,7 @@ app.post("/api/chat", async (req, res) => {
                 },
 
                 body: JSON.stringify({
-                    model: "inclusionai/ling-3.2-flash:free",
+                    model: "nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free",
                     messages,
                     temperature: 0.7,
                     max_tokens: 1000,
@@ -43,4 +43,4 @@ app.post("/api/chat", async (req, res) => {
             }
         );
 
-       
+        
