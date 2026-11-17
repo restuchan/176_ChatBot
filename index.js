@@ -76,11 +76,17 @@ app.post("/api/chat", async (req, res) => {
 
             const lines = buffer.split("\n");
 
+            //simpan bagian terakhir dari buffer yang belum lengkap
             buffer = lines.pop();
 
-            for (const line of lines) {
-                processLine(line);
-            }
-        }
+            for (const line of lines) {                            
 
-        
+                const trimmedLine = line.trim();
+
+                if (!trimmedLine) {
+                    continue;
+                }   
+
+                if (!trimmedLine.startsWith("data:")) {
+                    continue;
+                }
