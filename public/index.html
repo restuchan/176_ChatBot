@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Asisten AI</title>
+  <meta name="description" content="Asisten AI dengan antarmuka kaca buram: tanya apa saja, jawaban mengalir langsung.">
+  <meta name="theme-color" content="#c9cddb">
+
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cdefs%3E%3CradialGradient id='g' cx='35%25' cy='30%25' r='80%25'%3E%3Cstop offset='0' stop-color='%23fff'/%3E%3Cstop offset='.4' stop-color='%23a9c4ff'/%3E%3Cstop offset='1' stop-color='%233950d8'/%3E%3C/radialGradient%3E%3C/defs%3E%3Ccircle cx='16' cy='16' r='14' fill='url(%23g)'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Onest:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Sprite ikon (stroke, mengikuti currentColor) -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3.5" width="6" height="11" rx="3" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v2.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-send" viewBox="0 0 24 24"><path d="M12 19V5M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-stop" viewBox="0 0 24 24"><rect x="7" y="7" width="10" height="10" rx="2.4" fill="currentColor"/></symbol>
+      <symbol id="i-back" viewBox="0 0 24 24"><path d="M14.5 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-chevron" viewBox="0 0 24 24"><path d="M9.5 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-close" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M6 12.5l4 4 8-9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 3.5c.6 4.6 2.9 6.9 8.5 8.5-5.6 1.6-7.9 3.9-8.5 8.5-.6-4.6-2.9-6.9-8.5-8.5 5.6-1.6 7.9-3.9 8.5-8.5z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></symbol>
+      <symbol id="i-up-right" viewBox="0 0 24 24"><path d="M7 17L17 7M9 7h8v8" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+      <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8.5" y="8.5" width="10" height="11" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M15.5 8.5V6.8a2.3 2.3 0 0 0-2.3-2.3H7.3A2.3 2.3 0 0 0 5 6.8v7.4a2.3 2.3 0 0 0 2.3 2.3h1.2" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></symbol>
+      <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M19 8.5A7.5 7.5 0 0 0 5.6 7.2M5 4v3.5h3.5M5 15.5a7.5 7.5 0 0 0 13.4 1.3M19 20v-3.5h-3.5" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+    </defs>
+  </svg>
+
+  <div class="stage">
+    <div class="device">
+      <div class="phone" id="phone" data-view="home">
+
+        <!-- Wallpaper: kain perak yang bergerak pelan -->
+        <div class="wallpaper" aria-hidden="true">
+          <i class="fold fold-a"></i>
+          <i class="fold fold-b"></i>
+          <i class="fold fold-c"></i>
+          <i class="sheen"></i>
+        </div>
+
+        <!-- Status bar (hanya tampil di bingkai ponsel desktop) -->
+        <div class="statusbar" aria-hidden="true">
+          <span id="clock">9:41</span>
+          <span class="status-icons">
+            <svg viewBox="0 0 18 12" width="18" height="12"><path d="M1 9h2v2H1zM5 6.5h2V11H5zM9 4h2v7H9zM13 1h2v10h-2z" fill="currentColor"/></svg>
+            <svg viewBox="0 0 17 12" width="17" height="12"><path d="M8.5 2.4c2.2 0 4.2.9 5.7 2.3l1-1.1A9.6 9.6 0 0 0 8.5.9a9.6 9.6 0 0 0-6.7 2.7l1 1.1a8 8 0 0 1 5.7-2.3zm0 3.6c1.2 0 2.3.5 3.2 1.2l1-1.1a7 7 0 0 0-8.4 0l1 1.1c.9-.7 2-1.2 3.2-1.2zm0 3.4c.6 0 1.1.2 1.5.6L8.5 11.5 7 10c.4-.4.9-.6 1.5-.6z" fill="currentColor"/></svg>
+            <svg viewBox="0 0 26 12" width="26" height="12"><rect x=".5" y=".5" width="22" height="11" rx="3.2" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="8" rx="2" fill="currentColor"/><path d="M24 4v4c.8-.3 1.4-1 1.4-2s-.6-1.7-1.4-2z" fill="currentColor" opacity=".5"/></svg>
+          </span>
+        </div>
+
+        <!-- Layar utama -->
+        <main class="screen">
+
+          <!-- 1. Beranda -->
+          <section class="home" id="home" aria-labelledby="greeting">
+            <header class="hello">
+              <h1 id="greeting">Selamat pagi</h1>
+              <p>Mau mulai dari mana hari ini?</p>
+            </header>
+
+            <div class="grid" id="suggestions">
+              <button class="card" type="button" data-prompt="Buatkan rencana belajar 7 hari untuk persiapan ujian akhir semester.">
+                <span class="card-title">Rencana belajar</span>
+                <span class="card-sub">Susun jadwal 7 hari</span>
+                <span class="chip">Jadwal ujian</span>
+              </button>
+
+              <button class="card tint-a" type="button" data-prompt="Jelaskan cara meringkas materi kuliah dengan efektif, lengkap dengan contoh.">
+                <span class="card-title">Ringkas materi</span>
+                <span class="card-sub">Inti bacaan, tanpa basa-basi</span>
+                <span class="chip">Catatan kuliah</span>
+              </button>
+
+              <button class="card tint-b" type="button" data-prompt="Bagaimana cara debugging JavaScript secara sistematis? Beri langkah-langkahnya.">
+                <span class="card-title">Cari bug</span>
+                <span class="card-sub">Telusuri error langkah demi langkah</span>
+                <span class="chip">JavaScript</span>
+              </button>
+
+              <button class="card" type="button" data-prompt="Tulis email sopan kepada dosen untuk meminta perpanjangan waktu pengumpulan tugas.">
+                <span class="card-title">Tulis email</span>
+                <span class="card-sub">Rapi dan sopan</span>
+                <span class="chip">Email ke dosen</span>
+              </button>
+
+              <button class="card tint-a" type="button" data-prompt="Beri 5 ide proyek akhir berupa aplikasi web yang cocok untuk mahasiswa.">
+                <span class="card-title">Ide proyek</span>
+                <span class="card-sub">Mulai dari yang bisa dikerjakan</span>
+                <span class="chip">Aplikasi web</span>
+              </button>
+
+              <button class="card tint-b" type="button" data-prompt="Jelaskan async/await di JavaScript dengan contoh sederhana.">
+                <span class="card-title">Jelaskan konsep</span>
+                <span class="card-sub">Dengan contoh singkat</span>
+                <span class="chip">Async / await</span>
+              </button>
+            </div>
+          </section>
+
+          <!-- 2. Header percakapan -->
+          <header class="chat-top" id="chatTop">
+            <button class="round" id="backBtn" type="button" aria-label="Percakapan baru">
+              <svg class="ic"><use href="#i-back"/></svg>
+            </button>
+
+            <p class="who" id="who"><i class="dots" aria-hidden="true"></i><span id="whoText">Asisten</span></p>
+
+            <button class="round" id="copyBtn" type="button" aria-label="Salin percakapan">
+              <svg class="ic"><use href="#i-copy"/></svg>
+            </button>
+          </header>
+
+          <!-- 3. Lembar percakapan -->
+          <section class="sheet" id="sheet" aria-label="Percakapan">
+            <i class="grab" aria-hidden="true"></i>
+            <div class="messages" id="messages" role="log" aria-live="off" tabindex="-1"></div>
+          </section>
+        </main>
+
+        <!-- Composer: satu bilah untuk semua kondisi -->
+        <form class="composer" id="composer" data-mode="mic" autocomplete="off">
+          <button class="round plain" id="newBtn" type="button" aria-label="Percakapan baru">
+            <svg class="ic"><use href="#i-plus"/></svg>
+          </button>
+
+          <label class="field">
+            <span class="sr">Tulis pesan</span>
+            <textarea id="input" rows="1" maxlength="4000" placeholder="Tulis pesan…" enterkeyhint="send"></textarea>
+          </label>
+
+          <p class="busy-status" id="busyStatus" aria-hidden="true">
+            <i class="orb"></i><span id="busyText">Berpikir…</span>
+          </p>
+
+          <button class="round action" id="actionBtn" type="submit" aria-label="Kirim">
+            <svg class="ic ic-mic"><use href="#i-mic"/></svg>
+            <svg class="ic ic-send"><use href="#i-send"/></svg>
+            <svg class="ic ic-stop"><use href="#i-stop"/></svg>
+          </button>
+        </form>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        <p class="sr" id="announcer" role="status" aria-live="polite"></p>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+</body>
+</html>
