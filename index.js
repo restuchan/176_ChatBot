@@ -109,10 +109,10 @@ app.post("/api/chat", async (req, res) => {
                     }
 
                 } catch (error) {
-                    console.error{
+                    console.error(
                         "Gagal parsing streaming data:", 
                         error 
-                    };
+                    );
                 }
             }
         }
@@ -129,15 +129,19 @@ app.post("/api/chat", async (req, res) => {
                 error: "Terjadi kesalahan pada server"
             });
         } else {
-            res.write{
+            res.write(
                 `data: ${JSON.stringify(
                     "Terjadi kesalahan pada server"
                 )}\n\n`
-            };
+            );
 
             res.end();
         }
     }
-)};
+});
+
+app.listen(port, () => {
+    console.log(`Server berjalan di http://localhost:${port}`);
+});
         
             
